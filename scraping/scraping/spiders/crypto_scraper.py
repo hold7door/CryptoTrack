@@ -46,6 +46,7 @@ class CryptoScraper(Spider):
             
         yield {
             'crypto_count': crypto_count,
+            'instance_id': 1,
             'timestamp': current_datetime.timestamp()
         }
 

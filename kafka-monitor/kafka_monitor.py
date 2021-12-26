@@ -2,8 +2,9 @@ from kafka import KafkaConsumer
 import uuid
 import ujson
 import time
-
 import settings
+
+from plugins.redis_handler import RedisHandler
 
 class KafkaMonitor:
 
@@ -11,6 +12,7 @@ class KafkaMonitor:
     
     def __init__(self):
         self.my_uuid = str(uuid.uuid4()).split('-')[4]
+        self.plugins = {}
     
     def _create_consumer(self):
         '''
@@ -42,7 +44,8 @@ class KafkaMonitor:
             for message in self.consumer:
                 if message is not None:
                     loaded_dict = ujson.loads(message.value)
-                    print(loaded_dict)
+                    print('Message received by kafka consumer', loaded_dict)
+                    self.plugins['redis_handler'].handle(loaded_dict)
         except:
             self.consumer.seek_to_end()
 
@@ -56,12 +59,21 @@ class KafkaMonitor:
             Setup kafka connections
         '''
         self.consumer= self._create_consumer()
+    
+    def _load_plugins(self):
+        '''
+            Load and initialize all plugins
+        '''
+        print("Loading plugins")
+        self.plugins['redis_handler'] = RedisHandler()
+        self.plugins['redis_handler'].setup()
 
     def run(self):
         '''
             Setup and run
         '''
         self._setup_kafka()
+        self._load_plugins()
         self._main_loop()
 
 

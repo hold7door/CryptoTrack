@@ -1,5 +1,7 @@
-KAFKA_HOSTS = ['localhost:29092']
+SLEEP_TIME = 0.01
 
+# Kafka Variables
+KAFKA_HOSTS = ['localhost:29092']
 KAFKA_INCOMING_TOPIC = 'demo.scraped_firehose'
 KAFKA_GROUP = 'demo-group'
 KAFKA_CONSUMER_TIMEOUT = 50
@@ -7,4 +9,9 @@ KAFKA_CONSUMER_AUTO_OFFSET_RESET = 'latest'
 KAFKA_CONSUMER_COMMIT_INTERVAL_MS = 5000
 KAFKA_CONSUMER_AUTO_COMMIT_ENABLE = True
 
-SLEEP_TIME = 0.01
+
+# Redis variables
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 0
+REDIS_SORTED_SET_NAME = 'crypto_daily'
