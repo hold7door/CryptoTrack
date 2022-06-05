@@ -3,6 +3,8 @@ import aioredis
 
 from typing import Optional
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
 from pydantic import BaseSettings, BaseModel
 
 from datetime import datetime, timedelta
@@ -18,7 +20,17 @@ class Query(BaseModel):
 log = logging.getLogger(__name__)
 config = Config()
 redis = aioredis.from_url(config.redis_url, decode_responses=True)
+
 app = FastAPI(title='CryptoTrack API server')
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 """ async def initialize_redis():

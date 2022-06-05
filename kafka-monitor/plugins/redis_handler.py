@@ -25,12 +25,13 @@ class RedisHandler(BaseHandler):
         # Get id of the instance that sent this message
         scraper_instance_id = dict['instance_id']
         for crypto_name in ['BTC', 'ETH']:
+            # order by timestamp
             score = dict['timestamp']
             value = dict['crypto_count'][crypto_name]
             # zadd updates element if key already exists
             # so if two different scraper instance send message at same timestamp
             # only one of them will be in the set, but we want both
-            # therefor 'key' is combination of both 'value' and scraper instance if
+            # therefore 'key' is combination of both 'value' and scraper instance if
             self.redis_conn.zadd(f'{settings.REDIS_SORTED_SET_NAME}_{crypto_name}', {
                     f'{value}_{scraper_instance_id}': score
                 },
